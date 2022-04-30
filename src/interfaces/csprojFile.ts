@@ -1,5 +1,7 @@
-import { ProjectXml } from "./projectXml";
+/* eslint-disable @typescript-eslint/naming-convention */
+
+import { Project } from "./project";
 
 export interface CsprojFile {
-    Project: ProjectXml;
+    Project: Project;
 }

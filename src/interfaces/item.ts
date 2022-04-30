@@ -1,5 +1,7 @@
-import { ProjectReferenceXml } from ".";
+/* eslint-disable @typescript-eslint/naming-convention */
+
+import { ProjectReference } from ".";
 
 export interface Item {
-    ProjectReference: ProjectReferenceXml[];
+    ProjectReference: ProjectReference[];
 }
