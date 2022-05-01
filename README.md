@@ -15,3 +15,7 @@ Currently not checking for all circular dependencies before adding a project ref
 ### 0.0.1
 
 Initial preview release
+
+## Contribute
+
+Open a PR or an issue on GitHub.
