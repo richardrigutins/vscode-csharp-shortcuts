@@ -3,6 +3,15 @@
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
   "version": "0.0.1",
+  "publisher": "richardrigutins",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richardrigutins/vscode-csharp-shortcuts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/richardrigutins/vscode-csharp-shortcuts/issues"
+  },
+  "homepage": "https://github.com/richardrigutins/vscode-csharp-shortcuts/blob/main/README.md",
   "engines": {
     "vscode": "^1.66.0"
   },
