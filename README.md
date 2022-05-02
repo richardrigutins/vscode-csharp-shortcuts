@@ -8,7 +8,7 @@ A VS Code extension that adds shortcuts for common operations for C# projects.
 
 ## Known Issues
 
-Currently not checking for all circular dependencies before adding a project reference.
+Not showing error messages when a file is not found.
 
 ## Release Notes
 

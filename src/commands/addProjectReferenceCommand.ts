@@ -93,10 +93,30 @@ export class AddProjectReferenceCommand {
      * @returns true if the project would cause a circular reference if added
      */
     private async isCircularReference(sourceProject: string, targetProject: string): Promise<boolean> {
-        let referencesOfTargetProject = await FileUtilities.readProjectReferences(targetProject);
-        let isCircularReference = referencesOfTargetProject.includes(sourceProject);
+        let referenceTree = await this.readReferencesTree(targetProject);
+        let result = referenceTree.includes(sourceProject);
 
-        return isCircularReference;
+        return result;
+    }
+
+    /**
+     * Reads the list of project references of the selected project and of its references
+     * @param targetProject The absolute path to the csproj file
+     * @returns The list of references
+     */
+    private async readReferencesTree(targetProject: string): Promise<string[]> {
+        let references = await FileUtilities.readProjectReferences(targetProject);
+        for (let index = 0; index < references.length; index++) {
+            const reference = references[index];
+            let referencesOfReference = await FileUtilities.readProjectReferences(reference);
+            referencesOfReference.forEach(r => {
+                if (!references.includes(r)) {
+                    references.push(r);
+                };
+            });
+        }
+
+        return references;
     }
 
     /**
