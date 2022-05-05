@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { ProjectReferenceQuickPickItem } from '../interfaces';
-import { FileUtilities, TerminalUtilities } from '../utilities';
-import { QuickPickUtilities } from '../utilities/quickPickUtilities';
+import { FileUtilities, QuickPickUtilities, TerminalUtilities } from '../utilities';
 
 export class AddProjectReferenceCommand {
     /**
