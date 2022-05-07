@@ -30,6 +30,17 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "C# Shortcuts configuration",
+      "properties": {
+        "csharp-shortcuts.searchPrereleasePackages": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables searching for prerelease packages in the NuGet package manager"
+        }
+      }
+    },
     "commands": [
       {
         "command": "csharp-shortcuts.addProjectReference",

@@ -27,7 +27,7 @@ export class ManageNuGetPackagesCommand {
     }
 
     private searchNewPackage(value: string, csprojPath: string): void {
-        this.searchNugetPackages(value, false).then(items => {
+        this.searchNugetPackages(value).then(items => {
             let quickPickItems = this.buildPackagesQuickPickItems(items);
             let quickPick = vscode.window.createQuickPick<NugetReferenceQuickPickItem>();
             quickPick.items = quickPickItems;
@@ -76,7 +76,7 @@ export class ManageNuGetPackagesCommand {
                 quickPick.enabled = false;
                 const packageName = selectedPackage.packageName;
                 const packageVersion = selectedPackage.versions[0];
-                this.searchNugetPackages(packageName, false).then(items => {
+                this.searchNugetPackages(packageName).then(items => {
                     const foundPackage = items.find(p => p.id === packageName);
                     if (foundPackage) {
                         const versions = foundPackage.versions.filter(v => v.version !== packageVersion).map(v => v.version);
@@ -145,7 +145,10 @@ export class ManageNuGetPackagesCommand {
         return result;
     }
 
-    private async searchNugetPackages(searchText: string, prerelease: boolean): Promise<NugetSearchResultItem[]> {
+    private async searchNugetPackages(searchText: string): Promise<NugetSearchResultItem[]> {
+        const prerelease = vscode.workspace
+                                .getConfiguration('csharp-shortcuts')
+                                .get<boolean>('searchPrereleasePackages') ?? false;
         return await NugetUtilities.searchNugetPackages(searchText, prerelease);
     }
 
