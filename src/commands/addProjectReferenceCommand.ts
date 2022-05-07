@@ -9,16 +9,20 @@ export class AddProjectReferenceCommand {
      * @param csprojPath The absolute path to the csproj file
      */
     public async run(csprojPath: string) {
-        let projectReferences = await this.getCurrentProjectReferences(csprojPath);
         let otherProjects = await this.findOtherProjects(csprojPath);
-        let quickPickItems = await this.buildQuickPickItems(projectReferences, otherProjects);
-        let quickPick = this.buildQuickPick(quickPickItems);
-        quickPick.onDidAccept(() => {
-            this.updateProjectReferences(csprojPath, quickPickItems);
-            quickPick.hide();
-        });
+        if (otherProjects.length > 0) {
+            let projectReferences = await this.getCurrentProjectReferences(csprojPath);
+            let quickPickItems = await this.buildQuickPickItems(projectReferences, otherProjects);
+            let quickPick = this.buildQuickPick(quickPickItems);
+            quickPick.onDidAccept(() => {
+                this.updateProjectReferences(csprojPath, quickPickItems);
+                quickPick.hide();
+            });
 
-        quickPick.show();
+            quickPick.show();
+        } else {
+            vscode.window.showInformationMessage('No other projects found in the current workspace.');
+        }
     }
 
     private async getCurrentProjectReferences(csprojPath: string): Promise<string[]> {
