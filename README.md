@@ -8,7 +8,12 @@ A VS Code extension that adds shortcuts for common operations for C# projects.
 
 ## Known Issues
 
-Not showing error messages when a file is not found.
+- Not showing error messages when a file is not found.
+- Not showing information messages when there are no projects to add.
+
+## Current Limitations
+
+- Can only search public packages from NuGet.org.
 
 ## Release Notes
 

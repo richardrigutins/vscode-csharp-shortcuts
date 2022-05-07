@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AddProjectReferenceCommand } from './commands';
-import { AddPackageReferenceCommand } from './commands/addPackageReferenceCommand';
+import { ManageNuGetPackagesCommand } from './commands/manageNuGetPackagesCommand';
 
 export function activate(context: vscode.ExtensionContext) {
 	let projectReferenceDisposable = vscode.commands.registerCommand('csharp-shortcuts.addProjectReference', async (csprojUri: vscode.Uri) => {
@@ -15,9 +15,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(projectReferenceDisposable);
 
-	let packageReferenceDisposable = vscode.commands.registerCommand('csharp-shortcuts.addPackageReference', async (csprojUri: vscode.Uri) => {
+	let packageReferenceDisposable = vscode.commands.registerCommand('csharp-shortcuts.manageNuGetPackages', async (csprojUri: vscode.Uri) => {
 		try {
-			let command = new AddPackageReferenceCommand();
+			let command = new ManageNuGetPackagesCommand();
 			await command.run(csprojUri.fsPath);
 		} catch (e) {
 			console.error(e);

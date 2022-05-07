@@ -26,7 +26,7 @@
   ],
   "activationEvents": [
     "onCommand:csharp-shortcuts.addProjectReference",
-    "onCommand:csharp-shortcuts.addPackageReference"
+    "onCommand:csharp-shortcuts.manageNuGetPackages"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -36,8 +36,8 @@
         "title": "Add project reference"
       },
       {
-        "command": "csharp-shortcuts.addPackageReference",
-        "title": "Browse"
+        "command": "csharp-shortcuts.manageNuGetPackages",
+        "title": "Manage NuGet packages"
       }
     ],
     "menus": {
@@ -49,23 +49,11 @@
         },
         {
           "when": "resourceExtname == .csproj",
-          "submenu": "csharp-shortcuts.manageNuGetPackages",
+          "command": "csharp-shortcuts.manageNuGetPackages",
           "group": "CSharpShortcutsGroup@1"
         }
-      ],
-      "csharp-shortcuts.manageNuGetPackages": [
-        {
-          "command": "csharp-shortcuts.addPackageReference",
-          "title": "Browse"
-        }
       ]
-    },
-    "submenus": [
-      {
-        "label": "Manage NuGet packages",
-        "id": "csharp-shortcuts.manageNuGetPackages"
-      }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -90,6 +78,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "compare-versions": "^4.1.3",
     "fast-xml-parser": "^4.0.7"
   }
 }

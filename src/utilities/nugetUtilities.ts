@@ -8,8 +8,6 @@ export module NugetUtilities {
         return axios.default
             .get<NugetSearchResult>(nugetEndpoint)
             .then(res => {
-                console.log(`statusCode: ${res.status}`);
-                console.log(res.data.data.map(item => item.id));
                 return res.data.data;
             })
             .catch(error => {
