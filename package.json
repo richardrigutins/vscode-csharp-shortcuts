@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
@@ -25,14 +25,30 @@
     "shortcuts"
   ],
   "activationEvents": [
-    "onCommand:csharp-shortcuts.addProjectReference"
+    "onCommand:csharp-shortcuts.addProjectReference",
+    "onCommand:csharp-shortcuts.manageNuGetPackages"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "C# Shortcuts configuration",
+      "properties": {
+        "csharp-shortcuts.searchPrereleasePackages": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables searching for prerelease packages in the NuGet package manager"
+        }
+      }
+    },
     "commands": [
       {
         "command": "csharp-shortcuts.addProjectReference",
         "title": "Add project reference"
+      },
+      {
+        "command": "csharp-shortcuts.manageNuGetPackages",
+        "title": "Manage NuGet packages"
       }
     ],
     "menus": {
@@ -40,6 +56,11 @@
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.addProjectReference",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj",
+          "command": "csharp-shortcuts.manageNuGetPackages",
           "group": "CSharpShortcutsGroup@1"
         }
       ]
@@ -67,6 +88,8 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "compare-versions": "^4.1.3",
     "fast-xml-parser": "^4.0.7"
   }
 }

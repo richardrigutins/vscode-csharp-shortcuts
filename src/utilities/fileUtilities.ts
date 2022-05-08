@@ -1,6 +1,6 @@
 import path = require('path');
 import * as vscode from 'vscode';
-import { CsprojFile, Item } from '../interfaces';
+import { CsprojFile, Item, PackageReference } from '../interfaces';
 import { XMLParser } from 'fast-xml-parser';
 
 export module FileUtilities {
@@ -11,17 +11,10 @@ export module FileUtilities {
      */
     export async function readProjectReferences(csprojPath: string): Promise<string[]> {
         const parsedCsproj: CsprojFile = await parseCsprojContent(csprojPath);
+        const itemGroups = getItemGroups(parsedCsproj);
+        const projectFolder = path.dirname(csprojPath);
+        const result = itemGroups.flatMap(i => i.ProjectReference).filter(r => r).map(r => getAbsolutePath(r.Include, projectFolder));
 
-        let result: string[] = [];
-        if (parsedCsproj?.Project?.ItemGroup) {
-            const itemGroupElement = parsedCsproj.Project.ItemGroup;
-
-            // If only one ItemGroup element is present the parser doesn't consider it as an array, so we need to wrap it in an array
-            const itemGroups: Item[] = Array.isArray(itemGroupElement) ? itemGroupElement : [itemGroupElement];
-
-            const projectFolder = path.dirname(csprojPath);
-            result = itemGroups.flatMap(i => i.ProjectReference).filter(r => r).map(r => getAbsolutePath(r.Include, projectFolder));
-        }
         return result;
     }
 
@@ -38,6 +31,19 @@ export module FileUtilities {
         const result: CsprojFile = parser.parse(csprojContent);
         return result;
     }
+
+    function getItemGroups(csproj: CsprojFile): Item[] {
+        let result: Item[] = [];
+        if (csproj?.Project?.ItemGroup) {
+            const itemGroupElement = csproj.Project.ItemGroup;
+
+            // If only one ItemGroup element is present the parser doesn't consider it as an array, so we need to wrap it in an array
+            result = Array.isArray(itemGroupElement) ? itemGroupElement : [itemGroupElement];
+        }
+
+        return result;
+    }
+
 
     /**
      * Converts the relative path of a project reference to an absolute path given the folder of the current project
@@ -75,6 +81,19 @@ export module FileUtilities {
         if (projectsToExclude) {
             result = result.filter(p => !projectsToExclude.includes(p));
         }
+        return result;
+    }
+
+    /**
+     * Parses the content of the selected csproj file and returns the package references
+     * @param csprojPath The path to the csproj file
+     * @returns The package references of the csproj file
+     */
+    export async function readPackageReferences(csprojPath: string): Promise<PackageReference[]> {
+        const parsedCsproj: CsprojFile = await parseCsprojContent(csprojPath);
+        const itemGroups = getItemGroups(parsedCsproj);
+        const result = itemGroups.flatMap(i => i.PackageReference).filter(r => r);
+
         return result;
     }
 }

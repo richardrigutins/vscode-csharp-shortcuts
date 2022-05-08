@@ -1,7 +1,7 @@
+import path = require('path');
 import * as vscode from 'vscode';
 import { ProjectReferenceQuickPickItem } from '../interfaces';
 import { FileUtilities, TerminalUtilities } from '../utilities';
-import { QuickPickUtilities } from '../utilities/quickPickUtilities';
 
 export class AddProjectReferenceCommand {
     /**
@@ -9,16 +9,20 @@ export class AddProjectReferenceCommand {
      * @param csprojPath The absolute path to the csproj file
      */
     public async run(csprojPath: string) {
-        let projectReferences = await this.getCurrentProjectReferences(csprojPath);
         let otherProjects = await this.findOtherProjects(csprojPath);
-        let quickPickItems = await this.buildQuickPickItems(projectReferences, otherProjects);
-        let quickPick = this.buildQuickPick(quickPickItems);
-        quickPick.onDidAccept(() => {
-            this.updateProjectReferences(csprojPath, quickPickItems);
-            quickPick.hide();
-        });
+        if (otherProjects.length > 0) {
+            let projectReferences = await this.getCurrentProjectReferences(csprojPath);
+            let quickPickItems = await this.buildQuickPickItems(projectReferences, otherProjects);
+            let quickPick = this.buildQuickPick(quickPickItems);
+            quickPick.onDidAccept(() => {
+                this.updateProjectReferences(csprojPath, quickPickItems);
+                quickPick.hide();
+            });
 
-        quickPick.show();
+            quickPick.show();
+        } else {
+            vscode.window.showInformationMessage('No other projects found in the current workspace.');
+        }
     }
 
     private async getCurrentProjectReferences(csprojPath: string): Promise<string[]> {
@@ -29,12 +33,48 @@ export class AddProjectReferenceCommand {
         return await FileUtilities.findProjectFiles().then(files => files.filter(f => f !== csprojPath));
     }
 
+    /**
+    * Builds a list of project reference quick pick items.
+    * @param currentReferences List of absolute paths of the current project references
+    * @param allProjects List of absolute paths of all projects to show in the quick pick
+    * @returns The list of quick pick items
+    */
     private async buildQuickPickItems(currentReferences: string[], allProjects: string[]): Promise<ProjectReferenceQuickPickItem[]> {
-        return QuickPickUtilities.buildProjectReferenceQuickPickItems(currentReferences, allProjects);
+        let items = allProjects.map(project => {
+            let isReferenced = currentReferences.includes(project);
+            let projectName = path.basename(project, '.csproj');
+            let fullPath = project;
+            return {
+                projectName: projectName,
+                fullPath: fullPath,
+                initialValue: isReferenced,
+                label: projectName,
+                picked: isReferenced,
+                description: fullPath,
+            };
+        }).sort((a, b) => a.projectName.localeCompare(b.projectName));
+
+        return items;
     }
 
+    /**
+     * Builds a quick pick for selecting project references.
+     * @param items The list of quick pick items
+     * @returns The quick pick
+     */
     private buildQuickPick(items: ProjectReferenceQuickPickItem[]): vscode.QuickPick<ProjectReferenceQuickPickItem> {
-        return QuickPickUtilities.buildProjectReferenceQuickPick(items);
+        let quickPick = vscode.window.createQuickPick<ProjectReferenceQuickPickItem>();
+        quickPick.items = items;
+        quickPick.selectedItems = items.filter(i => i.picked); // Show the current references as selected
+        quickPick.placeholder = 'Select project references to add';
+        quickPick.canSelectMany = true;
+
+        // Whenever a user changes the selection of an item, update the picked property
+        quickPick.onDidChangeSelection(selectedItems => {
+            items.forEach(i => i.picked = selectedItems.some(s => s.fullPath === i.fullPath));
+        });
+
+        return quickPick;
     }
 
     /**
