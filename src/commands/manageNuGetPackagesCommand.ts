@@ -16,7 +16,7 @@ export class ManageNuGetPackagesCommand {
             if (item.packageName.length === 0) {
                 quickPick.busy = true;
                 quickPick.enabled = false;
-                this.searchNewPackage(quickPick.value, csprojPath);
+                this.searchNewPackage(quickPick.value, csprojPath, packageReferences);
             }
             else {
                 this.managePackage(csprojPath, item);
@@ -26,9 +26,10 @@ export class ManageNuGetPackagesCommand {
         quickPick.show();
     }
 
-    private searchNewPackage(value: string, csprojPath: string): void {
+    private searchNewPackage(value: string, csprojPath: string, installedPackages: PackageReference[]): void {
         this.searchNugetPackages(value).then(items => {
-            let quickPickItems = this.buildPackagesQuickPickItems(items);
+            let validPackages = items.filter(p => !installedPackages.some(i => i.Include === p.id));
+            let quickPickItems = this.buildPackagesQuickPickItems(validPackages);
             let quickPick = vscode.window.createQuickPick<NugetReferenceQuickPickItem>();
             quickPick.items = quickPickItems;
             quickPick.placeholder = 'Select a package to add';
@@ -38,7 +39,7 @@ export class ManageNuGetPackagesCommand {
                 if (item.packageName.length === 0) {
                     quickPick.busy = true;
                     quickPick.enabled = false;
-                    this.searchNewPackage(quickPick.value, csprojPath);
+                    this.searchNewPackage(quickPick.value, csprojPath, installedPackages);
                 }
                 else {
                     let selectedPackage = item.packageName;
