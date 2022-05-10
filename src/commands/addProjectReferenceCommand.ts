@@ -2,13 +2,14 @@ import path = require('path');
 import * as vscode from 'vscode';
 import { ProjectReferenceQuickPickItem } from '../interfaces';
 import { FileUtilities, TerminalUtilities } from '../utilities';
+import { BaseCommand } from '.';
 
-export class AddProjectReferenceCommand {
+export class AddProjectReferenceCommand implements BaseCommand {
     /**
      * Runs the command to add or remove project references
      * @param csprojPath The absolute path to the csproj file
      */
-    public async run(csprojPath: string) {
+    async run(csprojPath: string) {
         let otherProjects = await this.findOtherProjects(csprojPath);
         if (otherProjects.length > 0) {
             let projectReferences = await this.getCurrentProjectReferences(csprojPath);

@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 import { NugetReferenceQuickPickItem, NugetSearchResultItem, PackageReference } from '../interfaces';
 import { FileUtilities, NugetUtilities, TerminalUtilities } from '../utilities';
 import compareVersions = require('compare-versions');
+import { BaseCommand } from '.';
 
-export class ManageNuGetPackagesCommand {
+export class ManageNuGetPackagesCommand implements BaseCommand {
     private readonly searchPackageQuickPickItem: NugetReferenceQuickPickItem = {
         packageName: '',
         label: 'Search...',
@@ -11,7 +12,7 @@ export class ManageNuGetPackagesCommand {
         alwaysShow: true,
     };
 
-    public async run(csprojPath: string) {
+    async run(csprojPath: string) {
         let packageReferences = await this.getCurrentPackageReferences(csprojPath);
         let items = this.buildManagePackagesQuickPickItems(packageReferences);
         this.showManagePackagesQuickPick(items, csprojPath, packageReferences);

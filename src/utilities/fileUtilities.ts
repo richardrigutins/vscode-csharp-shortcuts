@@ -24,12 +24,18 @@ export module FileUtilities {
      * @returns The parsed csproj file content
      */
     async function parseCsprojContent(csprojPath: string): Promise<CsprojFile> {
-        const document = await vscode.workspace.openTextDocument(csprojPath);
-        const csprojContent = document.getText();
+        const csprojContent = await readFileContent(csprojPath);
         // Project references are stored as attributes, so we must include them
         const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "" });
         const result: CsprojFile = parser.parse(csprojContent);
         return result;
+    }
+
+    async function readFileContent(filePath: string): Promise<string> {
+        const document = await vscode.workspace.openTextDocument(filePath);
+        const fileContent = document.getText();
+
+        return fileContent;
     }
 
     function getItemGroups(csproj: CsprojFile): Item[] {
@@ -43,7 +49,6 @@ export module FileUtilities {
 
         return result;
     }
-
 
     /**
      * Converts the relative path of a project reference to an absolute path given the folder of the current project
@@ -95,5 +100,15 @@ export module FileUtilities {
         const result = itemGroups.flatMap(i => i.PackageReference).filter(r => r);
 
         return result;
+    }
+
+    export async function readAddedProjects(slnFilePath: string): Promise<string[]> {
+        let fileContent = await readFileContent(slnFilePath);
+        let regex = /Project\(\"\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}\"\) = \"(.*)\"/g;
+        let matches = fileContent.match(regex);
+        let folder = path.dirname(slnFilePath);
+        let projects: string[] = matches?.flatMap(r => path.resolve(folder, r.split('"')[5])) ?? [];
+
+        return projects;
     }
 }

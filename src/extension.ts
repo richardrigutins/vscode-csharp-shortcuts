@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AddProjectReferenceCommand } from './commands';
+import { AddExistingProjectCommand, AddProjectReferenceCommand } from './commands';
 import { ManageNuGetPackagesCommand } from './commands/manageNuGetPackagesCommand';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -26,6 +26,18 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(packageReferenceDisposable);
+
+	let addExistingProjectDisposable = vscode.commands.registerCommand('csharp-shortcuts.addExistingProject', async (slnUri: vscode.Uri) => {
+		try {
+			let command = new AddExistingProjectCommand();
+			await command.run(slnUri.fsPath);
+		} catch (e) {
+			console.error(e);
+			vscode.window.showErrorMessage("An error occurred while adding a project.");
+		}
+	});
+
+	context.subscriptions.push(addExistingProjectDisposable);
 }
 
 export function deactivate() { }
