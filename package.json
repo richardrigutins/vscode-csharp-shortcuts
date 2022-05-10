@@ -26,7 +26,8 @@
   ],
   "activationEvents": [
     "onCommand:csharp-shortcuts.addProjectReference",
-    "onCommand:csharp-shortcuts.manageNuGetPackages"
+    "onCommand:csharp-shortcuts.manageNuGetPackages",
+    "onCommand:csharp-shortcuts.addExistingProject"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -49,6 +50,10 @@
       {
         "command": "csharp-shortcuts.manageNuGetPackages",
         "title": "Manage NuGet packages"
+      },
+      {
+        "command": "csharp-shortcuts.addExistingProject",
+        "title": "Existing project..."
       }
     ],
     "menus": {
@@ -62,9 +67,26 @@
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageNuGetPackages",
           "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .sln",
+          "submenu": "csharp-shortcuts.addToSolution",
+          "group": "CSharpShortcutsGroup@1"
+        }
+      ],
+      "csharp-shortcuts.addToSolution": [
+        {
+          "command": "csharp-shortcuts.addExistingProject",
+          "title": "Existing project..."
         }
       ]
-    }
+    },
+    "submenus": [
+      {
+        "label": "Add",
+        "id": "csharp-shortcuts.addToSolution"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
