@@ -102,7 +102,12 @@ export module FileUtilities {
         return result;
     }
 
-    export async function readAddedProjects(slnFilePath: string): Promise<string[]> {
+    /**
+     * Reads the content of a sln file and returns the path of all projects in the solution
+     * @param slnFilePath The path to the sln file
+     * @returns The absolute paths of the projects in the solution
+     */
+    export async function readProjectsFromSolution(slnFilePath: string): Promise<string[]> {
         let fileContent = await readFileContent(slnFilePath);
         let regex = /Project\(\"\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}\"\) = \"(.*)\"/g;
         let matches = fileContent.match(regex);
