@@ -8,6 +8,12 @@ A VS Code extension that adds shortcuts for common operations for C# projects.
 - _Manage NuGet packages_: adds an item to the contextual menu for csproj files to manage the installed NuGet packages or to search and install new ones
 - _Add existing projects to a solution_: adds an item for sln files to add or remove existing projects to a solution
 
+## Extension Settings
+
+This extension contributes the following settings:
+
+- `csharp-shortcuts.searchPrereleasePackages`: enables searching for prerelease packages in the NuGet package manager
+
 ## Known Issues
 
 - Not showing error messages when a file is not found.
