@@ -24,12 +24,18 @@ export module FileUtilities {
      * @returns The parsed csproj file content
      */
     async function parseCsprojContent(csprojPath: string): Promise<CsprojFile> {
-        const document = await vscode.workspace.openTextDocument(csprojPath);
-        const csprojContent = document.getText();
+        const csprojContent = await readFileContent(csprojPath);
         // Project references are stored as attributes, so we must include them
         const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "" });
         const result: CsprojFile = parser.parse(csprojContent);
         return result;
+    }
+
+    async function readFileContent(filePath: string): Promise<string> {
+        const document = await vscode.workspace.openTextDocument(filePath);
+        const fileContent = document.getText();
+
+        return fileContent;
     }
 
     function getItemGroups(csproj: CsprojFile): Item[] {
@@ -43,7 +49,6 @@ export module FileUtilities {
 
         return result;
     }
-
 
     /**
      * Converts the relative path of a project reference to an absolute path given the folder of the current project
@@ -69,9 +74,8 @@ export module FileUtilities {
     }
 
     /**
-     * Uses the vscode API to find the absolute paths of all csproj files in the current workspace
+     * Returns the absolute paths of all csproj files in the current workspace.
      * @param projectsToExclude An optional array of projects to exclude from the search
-     * @returns The absolute paths of all csproj files in the current workspace
      */
     export async function findProjectFiles(projectsToExclude?: string[]): Promise<string[]> {
         const globPattern = '**/*.csproj';
@@ -85,7 +89,7 @@ export module FileUtilities {
     }
 
     /**
-     * Parses the content of the selected csproj file and returns the package references
+     * Parses the content of the selected csproj file and returns the package references.
      * @param csprojPath The path to the csproj file
      * @returns The package references of the csproj file
      */
@@ -95,5 +99,20 @@ export module FileUtilities {
         const result = itemGroups.flatMap(i => i.PackageReference).filter(r => r);
 
         return result;
+    }
+
+    /**
+     * Reads the content of a sln file and returns the path of all projects in the solution
+     * @param slnFilePath The path to the sln file
+     * @returns The absolute paths of the projects in the solution
+     */
+    export async function readProjectsFromSolution(slnFilePath: string): Promise<string[]> {
+        let fileContent = await readFileContent(slnFilePath);
+        let regex = /Project\(\"\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}\"\) = \"(.*)\"/g;
+        let matches = fileContent.match(regex);
+        let folder = path.dirname(slnFilePath);
+        let projects: string[] = matches?.flatMap(r => path.resolve(folder, r.split('"')[5])) ?? [];
+
+        return projects;
     }
 }

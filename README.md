@@ -3,9 +3,10 @@ A VS Code extension that adds shortcuts for common operations for C# projects.
 
 ## Features
 
-- _Add project references_: adds a button to the contextual menu for csproj files to visually add or remove references to other projects
+- _Add project references_: adds an item to the contextual menu for csproj files to visually add or remove references to other projects
 ![add project reference](images/add-project-reference-context-menu.png)
-- _Manage NuGet packages_: adds a button to the contextual menu for csproj files to manage the installed NuGet packages or to search and install new ones
+- _Manage NuGet packages_: adds an item to the contextual menu for csproj files to manage the installed NuGet packages or to search and install new ones
+- _Add existing projects to a solution_: adds an item for sln files to add or remove existing projects to a solution
 
 ## Known Issues
 
@@ -19,11 +20,12 @@ A VS Code extension that adds shortcuts for common operations for C# projects.
 
 ### 0.0.2
 
-Added option to manage package references
+- Added option to manage package references
+- Added option to add existing projects to a solution
 
 ### 0.0.1
 
-Initial preview release
+- Initial preview release
 
 ## Contribute
 

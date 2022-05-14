@@ -2,18 +2,18 @@ import path = require('path');
 import * as vscode from 'vscode';
 import { ProjectReferenceQuickPickItem } from '../interfaces';
 import { FileUtilities, TerminalUtilities } from '../utilities';
+import { BaseFileCommand } from '.';
 
-export class AddProjectReferenceCommand {
-    /**
-     * Runs the command to add or remove project references
-     * @param csprojPath The absolute path to the csproj file
-     */
-    public async run(csprojPath: string) {
-        let otherProjects = await this.findOtherProjects(csprojPath);
+/**
+ * Runs the command to add or remove project references on a csproj file.
+ */
+export class AddProjectReferenceCommand implements BaseFileCommand {
+    async run(csprojPath: string) {
+        const otherProjects = await this.findOtherProjects(csprojPath);
         if (otherProjects.length > 0) {
-            let projectReferences = await this.getCurrentProjectReferences(csprojPath);
-            let quickPickItems = await this.buildQuickPickItems(projectReferences, otherProjects);
-            let quickPick = this.buildQuickPick(quickPickItems);
+            const projectReferences = await this.getCurrentProjectReferences(csprojPath);
+            const quickPickItems = await this.buildProjectsQuickPickItems(projectReferences, otherProjects);
+            const quickPick = this.buildProjectsQuickPick(quickPickItems);
             quickPick.onDidAccept(() => {
                 this.updateProjectReferences(csprojPath, quickPickItems);
                 quickPick.hide();
@@ -33,17 +33,11 @@ export class AddProjectReferenceCommand {
         return await FileUtilities.findProjectFiles().then(files => files.filter(f => f !== csprojPath));
     }
 
-    /**
-    * Builds a list of project reference quick pick items.
-    * @param currentReferences List of absolute paths of the current project references
-    * @param allProjects List of absolute paths of all projects to show in the quick pick
-    * @returns The list of quick pick items
-    */
-    private async buildQuickPickItems(currentReferences: string[], allProjects: string[]): Promise<ProjectReferenceQuickPickItem[]> {
-        let items = allProjects.map(project => {
-            let isReferenced = currentReferences.includes(project);
-            let projectName = path.basename(project, '.csproj');
-            let fullPath = project;
+    private async buildProjectsQuickPickItems(currentReferences: string[], allProjects: string[]): Promise<ProjectReferenceQuickPickItem[]> {
+        const items = allProjects.map(project => {
+            const isReferenced = currentReferences.includes(project);
+            const projectName = path.basename(project, '.csproj');
+            const fullPath = project;
             return {
                 projectName: projectName,
                 fullPath: fullPath,
@@ -57,12 +51,7 @@ export class AddProjectReferenceCommand {
         return items;
     }
 
-    /**
-     * Builds a quick pick for selecting project references.
-     * @param items The list of quick pick items
-     * @returns The quick pick
-     */
-    private buildQuickPick(items: ProjectReferenceQuickPickItem[]): vscode.QuickPick<ProjectReferenceQuickPickItem> {
+    private buildProjectsQuickPick(items: ProjectReferenceQuickPickItem[]): vscode.QuickPick<ProjectReferenceQuickPickItem> {
         let quickPick = vscode.window.createQuickPick<ProjectReferenceQuickPickItem>();
         quickPick.items = items;
         quickPick.selectedItems = items.filter(i => i.picked); // Show the current references as selected
@@ -78,7 +67,7 @@ export class AddProjectReferenceCommand {
     }
 
     /**
-     * Adds and removes project references based on the current selection.
+     * Adds and removes project references based on the selected quickPickItems.
      * @param csprojPath The absolute path to the csproj file
      * @param quickPickItems The list of items from the quick pick
      */
@@ -88,14 +77,14 @@ export class AddProjectReferenceCommand {
     }
 
     /**
-     * Adds project references executing the dotnet add command, and shows an error message if the reference is circular.
+     * Adds project references executing the _dotnet add_ command, and shows an error message if the reference is circular.
      * @param csprojPath The absolute path to the csproj file
      * @param quickPickItems The list of items from the quick pick
      */
     private async addProjectReferences(csprojPath: string, quickPickItems: ProjectReferenceQuickPickItem[]) {
-        let projectsToAdd = quickPickItems.filter(e => !e.initialValue && e.picked);
-        let invalidProjects = await this.findCircularReferences(csprojPath, projectsToAdd);
-        let validProjects = projectsToAdd.filter(e => !invalidProjects.includes(e));
+        const projectsToAdd = quickPickItems.filter(e => !e.initialValue && e.picked);
+        const invalidProjects = await this.findCircularReferences(csprojPath, projectsToAdd);
+        const validProjects = projectsToAdd.filter(e => !invalidProjects.includes(e));
 
         if (validProjects?.length > 0) {
             TerminalUtilities.executeCommand(`dotnet add '${csprojPath}' reference`, validProjects.map(p => "'" + p.fullPath + "'"));
@@ -113,10 +102,10 @@ export class AddProjectReferenceCommand {
      * @returns A list of projects that would cause a circular reference if added
      */
     private async findCircularReferences(currentProjectPath: string, projectsToCheck: ProjectReferenceQuickPickItem[]): Promise<ProjectReferenceQuickPickItem[]> {
-        let circularReferences: ProjectReferenceQuickPickItem[] = [];
+        const circularReferences: ProjectReferenceQuickPickItem[] = [];
 
-        let promises = projectsToCheck.map(async (projectToAdd) => this.isCircularReference(currentProjectPath, projectToAdd.fullPath));
-        let promisesResults = await Promise.all(promises);
+        const promises = projectsToCheck.map(async (projectToAdd) => this.isCircularReference(currentProjectPath, projectToAdd.fullPath));
+        const promisesResults = await Promise.all(promises);
         for (let i = 0; i < promisesResults.length; i++) {
             if (promisesResults[i]) {
                 circularReferences.push(projectsToCheck[i]);
@@ -133,8 +122,8 @@ export class AddProjectReferenceCommand {
      * @returns true if the project would cause a circular reference if added
      */
     private async isCircularReference(sourceProject: string, targetProject: string): Promise<boolean> {
-        let referenceTree = await this.readReferencesTree(targetProject);
-        let result = referenceTree.includes(sourceProject);
+        const referenceTree = await this.readReferencesTree(targetProject);
+        const result = referenceTree.includes(sourceProject);
 
         return result;
     }
@@ -145,10 +134,10 @@ export class AddProjectReferenceCommand {
      * @returns The list of references
      */
     private async readReferencesTree(targetProject: string): Promise<string[]> {
-        let references = await FileUtilities.readProjectReferences(targetProject);
+        const references = await FileUtilities.readProjectReferences(targetProject);
         for (let index = 0; index < references.length; index++) {
             const reference = references[index];
-            let referencesOfReference = await FileUtilities.readProjectReferences(reference);
+            const referencesOfReference = await FileUtilities.readProjectReferences(reference);
             referencesOfReference.forEach(r => {
                 if (!references.includes(r)) {
                     references.push(r);
@@ -160,12 +149,12 @@ export class AddProjectReferenceCommand {
     }
 
     /**
-     * Removes project references executing the dotnet remove command.
+     * Removes project references executing the _dotnet remove_ command.
      * @param csprojPath The absolute path to the csproj file
      * @param projectReferences The list of items from the quick pick
      */
     private async removeProjectReferences(csprojPath: string, projectReferences: ProjectReferenceQuickPickItem[]) {
-        let projectsToRemove = projectReferences.filter(e => e.initialValue && !e.picked);
+        const projectsToRemove = projectReferences.filter(e => e.initialValue && !e.picked);
         if (projectsToRemove?.length > 0) {
             TerminalUtilities.executeCommand(`dotnet remove '${csprojPath}' reference`, projectsToRemove.map(p => "'" + p.fullPath + "'"));
         }
