@@ -74,9 +74,8 @@ export module FileUtilities {
     }
 
     /**
-     * Uses the vscode API to find the absolute paths of all csproj files in the current workspace
+     * Returns the absolute paths of all csproj files in the current workspace.
      * @param projectsToExclude An optional array of projects to exclude from the search
-     * @returns The absolute paths of all csproj files in the current workspace
      */
     export async function findProjectFiles(projectsToExclude?: string[]): Promise<string[]> {
         const globPattern = '**/*.csproj';
@@ -90,7 +89,7 @@ export module FileUtilities {
     }
 
     /**
-     * Parses the content of the selected csproj file and returns the package references
+     * Parses the content of the selected csproj file and returns the package references.
      * @param csprojPath The path to the csproj file
      * @returns The package references of the csproj file
      */

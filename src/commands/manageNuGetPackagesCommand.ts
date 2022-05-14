@@ -2,9 +2,12 @@ import * as vscode from 'vscode';
 import { NugetReferenceQuickPickItem, NugetSearchResultItem, PackageReference } from '../interfaces';
 import { FileUtilities, NugetUtilities, TerminalUtilities } from '../utilities';
 import compareVersions = require('compare-versions');
-import { BaseCommand } from '.';
+import { BaseFileCommand } from '.';
 
-export class ManageNuGetPackagesCommand implements BaseCommand {
+/**
+ * Runs the command to manage NuGet packages on a csproj file.
+ */
+export class ManageNuGetPackagesCommand implements BaseFileCommand {
     private readonly searchPackageQuickPickItem: NugetReferenceQuickPickItem = {
         packageName: '',
         label: 'Search...',
@@ -13,8 +16,8 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
     };
 
     async run(csprojPath: string) {
-        let packageReferences = await this.getCurrentPackageReferences(csprojPath);
-        let items = this.buildManagePackagesQuickPickItems(packageReferences);
+        const packageReferences = await this.getCurrentPackageReferences(csprojPath);
+        const items = this.buildManagePackagesQuickPickItems(packageReferences);
         this.showManagePackagesQuickPick(items, csprojPath, packageReferences);
     }
 
@@ -28,7 +31,7 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
     }
 
     private buildManagePackagesQuickPickItems(packageReferences: PackageReference[]): NugetReferenceQuickPickItem[] {
-        let result: NugetReferenceQuickPickItem[] = [];
+        const result: NugetReferenceQuickPickItem[] = [];
         result.push(this.searchPackageQuickPickItem);
 
         packageReferences.forEach(packageReference => {
@@ -44,7 +47,7 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
     }
 
     private showManagePackagesQuickPick(quickPickItems: NugetReferenceQuickPickItem[], csprojPath: string, packageReferences: PackageReference[]) {
-        let quickPick = vscode.window.createQuickPick<NugetReferenceQuickPickItem>();
+        const quickPick = vscode.window.createQuickPick<NugetReferenceQuickPickItem>();
         quickPick.items = quickPickItems;
         quickPick.placeholder = 'Select an installed package to manage or search for a new one';
 
@@ -65,9 +68,9 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
 
     private showSearchPackageQuickPick(value: string, csprojPath: string, installedPackages: PackageReference[]): void {
         this.searchNugetPackages(value).then(items => {
-            let validPackages = items.filter(p => !installedPackages.some(i => i.Include === p.id));
-            let quickPickItems = this.buildSearchPackageQuickPickItems(validPackages);
-            let quickPick = vscode.window.createQuickPick<NugetReferenceQuickPickItem>();
+            const validPackages = items.filter(p => !installedPackages.some(i => i.Include === p.id));
+            const quickPickItems = this.buildSearchPackageQuickPickItems(validPackages);
+            const quickPick = vscode.window.createQuickPick<NugetReferenceQuickPickItem>();
             quickPick.items = quickPickItems;
             quickPick.placeholder = 'Select a package to add or search for another';
             quickPick.value = value;
@@ -75,7 +78,7 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
             quickPick.onDidChangeSelection(items => {
                 quickPick.busy = true;
                 quickPick.enabled = false;
-                let item = items[0];
+                const item = items[0];
                 if (item === this.searchPackageQuickPickItem) {
                     this.showSearchPackageQuickPick(quickPick.value, csprojPath, installedPackages);
                 }
@@ -96,7 +99,7 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
     }
 
     private buildSearchPackageQuickPickItems(nugetSearchResults: NugetSearchResultItem[]): NugetReferenceQuickPickItem[] {
-        let result: NugetReferenceQuickPickItem[] = [];
+        const result: NugetReferenceQuickPickItem[] = [];
         result.push(this.searchPackageQuickPickItem);
 
         nugetSearchResults.forEach(packageReference => {
@@ -118,14 +121,14 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
             placeHolder: placeHolder
         }).then(version => {
             if (version) {
-                let selectedVersion = version;
+                const selectedVersion = version;
                 this.addPackageReference(csprojPath, selectedPackage, selectedVersion);
             }
         });
     }
 
     /**
-     * Adds a package reference executing the dotnet add command.
+     * Adds a package reference executing the _dotnet add_ command.
      * @param csprojPath The absolute path to the csproj file
      * @param packageName The name of the package to add
      * @param packageVersion The version of the package to add
@@ -159,7 +162,7 @@ export class ManageNuGetPackagesCommand implements BaseCommand {
     }
 
     /**
-     * Removes a package reference executing the dotnet remove command.
+     * Removes a package reference executing the _dotnet remove_ command.
      * @param csprojPath The absolute path to the csproj file
      * @param packageName The name of the package to remove
      */
