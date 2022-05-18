@@ -1,7 +1,8 @@
-import path = require('path');
-import * as vscode from 'vscode';
-import { CsprojFile, Item, PackageReference } from '../interfaces';
+import { CsprojFile, Item, PackageReference, PropertyGroup } from '../interfaces';
 import { XMLParser } from 'fast-xml-parser';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as vscode from 'vscode';
 
 export module FileUtilities {
     /**
@@ -18,14 +19,9 @@ export module FileUtilities {
         return result;
     }
 
-    /**
-     * Opens the csproj file using the vscode API and parses its content to a CsprojFile object
-     * @param csprojPath The path to the csproj file
-     * @returns The parsed csproj file content
-     */
     async function parseCsprojContent(csprojPath: string): Promise<CsprojFile> {
         const csprojContent = await readFileContent(csprojPath);
-        // Project references are stored as attributes, so we must include them
+        // Project references are stored as attributes, so they shouldn't be ignored
         const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "" });
         const result: CsprojFile = parser.parse(csprojContent);
         return result;
@@ -114,5 +110,32 @@ export module FileUtilities {
         let projects: string[] = matches?.flatMap(r => path.resolve(folder, r.split('"')[5])) ?? [];
 
         return projects;
+    }
+
+    /**
+     * Parses the content of the selected csproj file and returns the PropertyGroup object
+     * @param csprojPath The path to the csproj file
+     */
+    async function readPropertyGroup(csprojPath: string): Promise<PropertyGroup> {
+        const parsedCsproj: CsprojFile = await parseCsprojContent(csprojPath);
+        const result = parsedCsproj.Project.PropertyGroup;
+
+        return result;
+    }
+
+    /**
+     * Parses the content of the selected csproj file and returns the user secrets id
+     * @param csprojPath The path to the csproj file
+     */
+    export async function readUserSecretsId(csprojPath: string): Promise<string> {
+        const propertyGroup = await readPropertyGroup(csprojPath);
+        return propertyGroup?.UserSecretsId;
+    }
+
+    /**
+     * Checks if the given path exists
+     */
+    export function pathExists(filePath: string): boolean {
+        return fs.existsSync(filePath);
     }
 }

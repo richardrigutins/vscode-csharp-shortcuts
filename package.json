@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
@@ -27,7 +27,8 @@
   "activationEvents": [
     "onCommand:csharp-shortcuts.addProjectReference",
     "onCommand:csharp-shortcuts.manageNuGetPackages",
-    "onCommand:csharp-shortcuts.addExistingProject"
+    "onCommand:csharp-shortcuts.addExistingProject",
+    "onCommand:csharp-shortcuts.manageUserSecrets"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -49,11 +50,15 @@
       },
       {
         "command": "csharp-shortcuts.manageNuGetPackages",
-        "title": "Manage NuGet packages"
+        "title": "Manage NuGet packages..."
       },
       {
         "command": "csharp-shortcuts.addExistingProject",
         "title": "Existing project..."
+      },
+      {
+        "command": "csharp-shortcuts.manageUserSecrets",
+        "title": "Manage User Secrets"
       }
     ],
     "menus": {
@@ -71,6 +76,11 @@
         {
           "when": "resourceExtname == .sln",
           "submenu": "csharp-shortcuts.addToSolution",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj",
+          "command": "csharp-shortcuts.manageUserSecrets",
           "group": "CSharpShortcutsGroup@1"
         }
       ],

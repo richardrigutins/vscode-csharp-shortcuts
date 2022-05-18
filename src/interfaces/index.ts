@@ -8,3 +8,4 @@ export * from "./packageReference";
 export * from "./projectReferenceQuickPickItem";
 export * from "./projectReference";
 export * from "./project";
+export * from "./propertyGroup";
