@@ -2,6 +2,7 @@ import path = require('path');
 import * as vscode from 'vscode';
 import { CsprojFile, Item, PackageReference, PropertyGroup } from '../interfaces';
 import { XMLParser } from 'fast-xml-parser';
+import * as fs from 'fs';
 
 export module FileUtilities {
     /**
@@ -134,5 +135,9 @@ export module FileUtilities {
     export async function readUserSecretsId(csprojPath: string): Promise<string> {
         const propertyGroup = await readPropertyGroup(csprojPath);
         return propertyGroup?.UserSecretsId;
+    }
+
+    export function fileExists(filePath: string): boolean {
+        return fs.existsSync(filePath);
     }
 }
