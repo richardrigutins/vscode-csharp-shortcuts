@@ -27,7 +27,8 @@
   "activationEvents": [
     "onCommand:csharp-shortcuts.addProjectReference",
     "onCommand:csharp-shortcuts.manageNuGetPackages",
-    "onCommand:csharp-shortcuts.addExistingProject"
+    "onCommand:csharp-shortcuts.addExistingProject",
+    "onCommand:csharp-shortcuts.manageUserSecrets"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -54,6 +55,10 @@
       {
         "command": "csharp-shortcuts.addExistingProject",
         "title": "Existing project..."
+      },
+      {
+        "command": "csharp-shortcuts.manageUserSecrets",
+        "title": "Manage user secrets"
       }
     ],
     "menus": {
@@ -71,6 +76,11 @@
         {
           "when": "resourceExtname == .sln",
           "submenu": "csharp-shortcuts.addToSolution",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj",
+          "command": "csharp-shortcuts.manageUserSecrets",
           "group": "CSharpShortcutsGroup@1"
         }
       ],
