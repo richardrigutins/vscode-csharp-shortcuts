@@ -50,7 +50,7 @@
       },
       {
         "command": "csharp-shortcuts.manageNuGetPackages",
-        "title": "Manage NuGet packages"
+        "title": "Manage NuGet packages..."
       },
       {
         "command": "csharp-shortcuts.addExistingProject",
@@ -58,7 +58,7 @@
       },
       {
         "command": "csharp-shortcuts.manageUserSecrets",
-        "title": "Manage user secrets"
+        "title": "Manage User Secrets"
       }
     ],
     "menus": {

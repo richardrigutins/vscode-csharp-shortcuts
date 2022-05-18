@@ -1,8 +1,8 @@
-import path = require('path');
-import * as vscode from 'vscode';
 import { CsprojFile, Item, PackageReference, PropertyGroup } from '../interfaces';
 import { XMLParser } from 'fast-xml-parser';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as vscode from 'vscode';
 
 export module FileUtilities {
     /**
@@ -19,14 +19,9 @@ export module FileUtilities {
         return result;
     }
 
-    /**
-     * Opens the csproj file using the vscode API and parses its content to a CsprojFile object
-     * @param csprojPath The path to the csproj file
-     * @returns The parsed csproj file content
-     */
     async function parseCsprojContent(csprojPath: string): Promise<CsprojFile> {
         const csprojContent = await readFileContent(csprojPath);
-        // Project references are stored as attributes, so we must include them
+        // Project references are stored as attributes, so they shouldn't be ignored
         const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "" });
         const result: CsprojFile = parser.parse(csprojContent);
         return result;
@@ -137,7 +132,10 @@ export module FileUtilities {
         return propertyGroup?.UserSecretsId;
     }
 
-    export function fileExists(filePath: string): boolean {
+    /**
+     * Checks if the given path exists
+     */
+    export function pathExists(filePath: string): boolean {
         return fs.existsSync(filePath);
     }
 }
