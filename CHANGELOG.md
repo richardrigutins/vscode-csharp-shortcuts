@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.5]
+
+- Added command to manage user secrets
+
 ## [0.0.4]
 
 - Added option to manage package references
