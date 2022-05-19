@@ -27,6 +27,9 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.0.6
+- Fixed an issue when reading project paths from a solution file on Linux and MacOS.
+
 ### 0.0.5
 
 - Added command to manage user secrets
