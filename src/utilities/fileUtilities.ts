@@ -1,4 +1,5 @@
 import { CsprojFile, Item, PackageReference, PropertyGroup } from '../interfaces';
+import { OsUtilities } from './osUtilities';
 import { XMLParser } from 'fast-xml-parser';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -103,13 +104,21 @@ export module FileUtilities {
      * @returns The absolute paths of the projects in the solution
      */
     export async function readProjectsFromSolution(slnFilePath: string): Promise<string[]> {
+        let result: string[] = [];
         let fileContent = await readFileContent(slnFilePath);
         let regex = /Project\(\"\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}\"\) = \"(.*)\"/g;
         let matches = fileContent.match(regex);
-        let folder = path.dirname(slnFilePath);
-        let projects: string[] = matches?.flatMap(r => path.resolve(folder, r.split('"')[5])) ?? [];
+        if (matches && matches.length > 0) {
+            let folder = path.dirname(slnFilePath);
+            let projectPaths = matches.flatMap(r =>r.split('"')[5]);
+            if (!OsUtilities.isWindows()) {
+                projectPaths = projectPaths.map(p => p.replace(/\\/g, '/'));
+            }
 
-        return projects;
+            result = projectPaths.flatMap(r => path.resolve(folder, r));
+        }
+
+        return result;
     }
 
     /**

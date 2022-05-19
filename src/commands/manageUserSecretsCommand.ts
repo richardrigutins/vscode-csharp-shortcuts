@@ -1,6 +1,5 @@
-import { FileUtilities, TerminalUtilities } from '../utilities';
+import { FileUtilities, OsUtilities, TerminalUtilities } from '../utilities';
 import { BaseFileCommand } from '.';
-import * as os from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
@@ -48,22 +47,19 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
     private getSecretsFilePath(userSecretsId: string): string {
         const isWindows = this.isWindows();
         if (isWindows) {
-            const baseFolder = process.env.APPDATA ?? '';
+            const baseFolder = OsUtilities.getAppDataFolder();
             const secretsFilePath = `Microsoft\\UserSecrets\\${userSecretsId}\\secrets.json`;
             return path.resolve(baseFolder, secretsFilePath);
         }
         else {
-            const baseFolder = os.homedir();
+            const baseFolder = OsUtilities.getHomeDirectory();
             const secretsFilePath = `.microsoft/usersecrets/${userSecretsId}/secrets.json`;
             return path.resolve(baseFolder, secretsFilePath);
         }
     }
 
     private isWindows(): boolean {
-        const platform = os.platform();
-        const isWindows = platform === 'win32';
-
-        return isWindows;
+        return OsUtilities.isWindows();
     }
 
     private async openSecretsFileWithExponentialBackoff(secretsFilePath: string): Promise<void> {
