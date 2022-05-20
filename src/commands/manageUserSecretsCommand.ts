@@ -14,6 +14,12 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
             userSecretsId = await this.readUserSecretsIdWithExponentialBackoff(csprojPath);
         }
 
+        // The user secrets id might have been initialized on another machine
+        // and the secrets file still needs to be created locally.
+        if (!this.fileExists(this.getSecretsFilePath(userSecretsId))) {
+            this.createEmptySecretsFile(csprojPath);
+        }
+
         const secretsFilePath = this.getSecretsFilePath(userSecretsId);
         await this.openSecretsFileWithExponentialBackoff(secretsFilePath);
     }
@@ -24,7 +30,10 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 
     private initializeUserSecrets(csprojPath: string) {
         TerminalUtilities.executeCommand(`dotnet user-secrets init --project ${csprojPath}`);
-        TerminalUtilities.executeCommand(`dotnet user-secrets clear --project ${csprojPath}`); // This creates the file after initialization
+    }
+
+    private createEmptySecretsFile(csprojPath: string) {
+        TerminalUtilities.executeCommand(`dotnet user-secrets clear --project ${csprojPath}`);
     }
 
     private async readUserSecretsIdWithExponentialBackoff(csprojPath: string): Promise<string> {
@@ -42,6 +51,10 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 
     private async waitForMilliseconds(milliseconds: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
+    private fileExists(filePath: string): boolean {
+        return FileUtilities.pathExists(filePath);
     }
 
     private getSecretsFilePath(userSecretsId: string): string {
@@ -66,7 +79,7 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
         const waitTime = 250;
         for (let i = 0; i < 7; i++) {
             await this.waitForMilliseconds(i * waitTime);
-            if (FileUtilities.pathExists(secretsFilePath)) {
+            if (this.fileExists(secretsFilePath)) {
                 return await this.openSecretsFile(secretsFilePath);
             }
         }
