@@ -1,6 +1,10 @@
 # C# Shortcuts
 A VS Code extension that adds shortcuts for common operations for C# projects.
 
+## Requirements
+
+This extension requires the dotnet CLI to be installed.
+
 ## Features
 This extensions adds the following shortcuts to the contextual menu for .csproj files:
 - _Add project references_: visually add or remove references to other projects
@@ -27,21 +31,27 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.0.7
+
+- Create an empty user secrets file if it doesn't exist.
+- Added a progress bar when initializing user secrets.
+
 ### 0.0.6
+
 - Fixed an issue when reading project paths from a solution file on Linux and MacOS.
 
 ### 0.0.5
 
-- Added command to manage user secrets
+- Added command to manage user secrets.
 
 ### 0.0.4
 
-- Added option to manage package references
-- Added option to add existing projects to a solution
+- Added option to manage package references.
+- Added option to add existing projects to a solution.
 
 ### 0.0.1
 
-- Initial preview release
+- Initial preview release.
 
 ## Contribute
 
