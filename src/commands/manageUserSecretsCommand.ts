@@ -7,8 +7,8 @@ import * as vscode from 'vscode';
  * Runs the command to manage user secrets on a csproj file.
  */
 export class ManageUserSecretsCommand implements BaseFileCommand {
-    private readonly backoffRetries = 8;
-    private readonly backoffDelay = 250;
+    private readonly backoffRetries = 20;
+    private readonly backoffDelay = 500;
 
     async run(csprojPath: string) {
         let userSecretsId: string | undefined = await this.readUserSecretsId(csprojPath);
@@ -18,7 +18,7 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
                 title: 'Initializing user secrets...'
             }, async () => {
                 this.initializeUserSecrets(csprojPath);
-                userSecretsId = await this.readUserSecretsIdWithExponentialBackoff(csprojPath);
+                userSecretsId = await this.readUserSecretsIdWithBackoff(csprojPath);
                 if (!userSecretsId) {
                     throw new Error(`Failed to read user secrets id from ${csprojPath}.`);
                 }
@@ -35,7 +35,7 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
                 // and the secrets file still needs to be created locally.
                 this.createEmptySecretsFile(csprojPath);
 
-                if (!(await this.checkFileExistenceWithExponentialBackoff(secretsFilePath))) {
+                if (!(await this.checkFileExistenceWithBackoff(secretsFilePath))) {
                     throw new Error(`Failed to find secrets file ${secretsFilePath}.`);
                 }
             });
@@ -56,9 +56,9 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
         TerminalUtilities.executeCommand(`dotnet user-secrets clear --project ${csprojPath}`);
     }
 
-    private async readUserSecretsIdWithExponentialBackoff(csprojPath: string): Promise<string | undefined> {
+    private async readUserSecretsIdWithBackoff(csprojPath: string): Promise<string | undefined> {
         for (let i = 0; i < this.backoffRetries; i++) {
-            await this.waitForMilliseconds(i * this.backoffDelay);
+            await this.waitForMilliseconds(this.backoffDelay);
             const userSecretsId = await this.readUserSecretsId(csprojPath);
             if (userSecretsId) {
                 return userSecretsId;
@@ -94,9 +94,9 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
         return OsUtilities.isWindows();
     }
 
-    private async checkFileExistenceWithExponentialBackoff(secretsFilePath: string): Promise<boolean> {
+    private async checkFileExistenceWithBackoff(secretsFilePath: string): Promise<boolean> {
         for (let i = 0; i < this.backoffRetries; i++) {
-            await this.waitForMilliseconds(i * this.backoffDelay);
+            await this.waitForMilliseconds(this.backoffDelay);
             if (this.fileExists(secretsFilePath)) {
                 return true;
             }
