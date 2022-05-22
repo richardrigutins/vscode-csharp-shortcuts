@@ -7,5 +7,5 @@ import { Item, PropertyGroup } from ".";
  */
 export interface Project {
     ItemGroup: Item[];
-    PropertyGroup: PropertyGroup;
+	PropertyGroup: PropertyGroup;
 }

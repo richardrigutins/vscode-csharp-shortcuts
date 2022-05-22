@@ -1,4 +1,4 @@
 export interface NugetSearchResultItemVersion {
-    version: string;
-    downloads: number;
+	version: string;
+	downloads: number;
 }
