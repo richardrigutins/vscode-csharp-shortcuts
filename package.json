@@ -28,7 +28,8 @@
     "onCommand:csharp-shortcuts.addProjectReference",
     "onCommand:csharp-shortcuts.manageNuGetPackages",
     "onCommand:csharp-shortcuts.addExistingProject",
-    "onCommand:csharp-shortcuts.manageUserSecrets"
+    "onCommand:csharp-shortcuts.manageUserSecrets",
+    "onCommand:csharp-shortcuts.addNewClass"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -46,7 +47,7 @@
     "commands": [
       {
         "command": "csharp-shortcuts.addProjectReference",
-        "title": "Add project reference"
+        "title": "Project Reference..."
       },
       {
         "command": "csharp-shortcuts.manageNuGetPackages",
@@ -59,15 +60,14 @@
       {
         "command": "csharp-shortcuts.manageUserSecrets",
         "title": "Manage User Secrets"
+      },
+      {
+        "command": "csharp-shortcuts.addNewClass",
+        "title": "Class..."
       }
     ],
     "menus": {
       "explorer/context": [
-        {
-          "when": "resourceExtname == .csproj",
-          "command": "csharp-shortcuts.addProjectReference",
-          "group": "CSharpShortcutsGroup@1"
-        },
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageNuGetPackages",
@@ -82,6 +82,11 @@
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageUserSecrets",
           "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj || (editorLangId == csharp && explorerResourceIsFolder)",
+          "submenu": "csharp-shortcuts.addToProject",
+          "group": "CSharpShortcutsGroup@1"
         }
       ],
       "csharp-shortcuts.addToSolution": [
@@ -89,12 +94,27 @@
           "command": "csharp-shortcuts.addExistingProject",
           "title": "Existing project..."
         }
+      ],
+      "csharp-shortcuts.addToProject": [
+        {
+          "command": "csharp-shortcuts.addProjectReference",
+          "when": "resourceExtname == .csproj",
+          "title": "Project Reference..."
+        },
+        {
+          "command": "csharp-shortcuts.addNewClass",
+          "title": "Class..."
+        }
       ]
     },
     "submenus": [
       {
         "label": "Add",
         "id": "csharp-shortcuts.addToSolution"
+      },
+      {
+        "label": "Add",
+        "id": "csharp-shortcuts.addToProject"
       }
     ]
   },
