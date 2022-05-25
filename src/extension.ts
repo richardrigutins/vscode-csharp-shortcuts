@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildProjectCommand } from './commands';
+import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildProjectCommand, CleanCommand } from './commands';
 import { ManageNuGetPackagesCommand } from './commands/manageNuGetPackagesCommand';
 import { ManageUserSecretsCommand } from './commands/manageUserSecretsCommand';
 
@@ -10,6 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 		['csharp-shortcuts.manageNuGetPackages', new ManageNuGetPackagesCommand()],
 		['csharp-shortcuts.manageUserSecrets', new ManageUserSecretsCommand()],
 		['csharp-shortcuts.buildProject', new BuildProjectCommand()],
+		['csharp-shortcuts.clean', new CleanCommand()],
 	]);
 
 	fileCommands.forEach((command, key) => {

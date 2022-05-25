@@ -29,7 +29,8 @@
     "onCommand:csharp-shortcuts.manageNuGetPackages",
     "onCommand:csharp-shortcuts.addExistingProject",
     "onCommand:csharp-shortcuts.manageUserSecrets",
-    "onCommand:csharp-shortcuts.buildProject"
+    "onCommand:csharp-shortcuts.buildProject",
+    "onCommand:csharp-shortcuts.clean"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -64,6 +65,10 @@
       {
         "command": "csharp-shortcuts.buildProject",
         "title": "Build"
+      },
+      {
+        "command": "csharp-shortcuts.clean",
+        "title": "Clean"
       }
     ],
     "menus": {
@@ -91,6 +96,11 @@
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.buildProject",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .sln",
+          "command": "csharp-shortcuts.clean",
           "group": "CSharpShortcutsGroup@1"
         }
       ],
