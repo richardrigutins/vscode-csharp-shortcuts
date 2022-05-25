@@ -28,7 +28,8 @@
     "onCommand:csharp-shortcuts.addProjectReference",
     "onCommand:csharp-shortcuts.manageNuGetPackages",
     "onCommand:csharp-shortcuts.addExistingProject",
-    "onCommand:csharp-shortcuts.manageUserSecrets"
+    "onCommand:csharp-shortcuts.manageUserSecrets",
+    "onCommand:csharp-shortcuts.buildProject"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -59,6 +60,10 @@
       {
         "command": "csharp-shortcuts.manageUserSecrets",
         "title": "Manage User Secrets"
+      },
+      {
+        "command": "csharp-shortcuts.buildProject",
+        "title": "Build"
       }
     ],
     "menus": {
@@ -81,6 +86,11 @@
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageUserSecrets",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj",
+          "command": "csharp-shortcuts.buildProject",
           "group": "CSharpShortcutsGroup@1"
         }
       ],
