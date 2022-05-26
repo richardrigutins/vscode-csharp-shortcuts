@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.8]
+
+- Added commands to build solutions and projects.
+
 ## [0.0.7]
 
 - Create an empty user secrets file if it doesn't exist.

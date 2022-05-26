@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
@@ -28,7 +28,10 @@
     "onCommand:csharp-shortcuts.addProjectReference",
     "onCommand:csharp-shortcuts.manageNuGetPackages",
     "onCommand:csharp-shortcuts.addExistingProject",
-    "onCommand:csharp-shortcuts.manageUserSecrets"
+    "onCommand:csharp-shortcuts.manageUserSecrets",
+    "onCommand:csharp-shortcuts.build",
+    "onCommand:csharp-shortcuts.clean",
+    "onCommand:csharp-shortcuts.rebuild"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -59,6 +62,18 @@
       {
         "command": "csharp-shortcuts.manageUserSecrets",
         "title": "Manage User Secrets"
+      },
+      {
+        "command": "csharp-shortcuts.build",
+        "title": "Build"
+      },
+      {
+        "command": "csharp-shortcuts.clean",
+        "title": "Clean"
+      },
+      {
+        "command": "csharp-shortcuts.rebuild",
+        "title": "Rebuild"
       }
     ],
     "menus": {
@@ -66,21 +81,36 @@
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.addProjectReference",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageNuGetPackages",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
           "when": "resourceExtname == .sln",
           "submenu": "csharp-shortcuts.addToSolution",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageUserSecrets",
+          "group": "CSharpShortcutsGroup@2"
+        },
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .sln",
+          "command": "csharp-shortcuts.build",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .sln",
+          "command": "csharp-shortcuts.clean",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .sln",
+          "command": "csharp-shortcuts.rebuild",
           "group": "CSharpShortcutsGroup@1"
         }
       ],
