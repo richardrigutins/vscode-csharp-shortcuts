@@ -11,9 +11,15 @@ This extensions adds the following shortcuts to the contextual menu for .csproj 
 ![add project reference](images/add-project-reference-context-menu.png)
 - _Manage NuGet packages_: manage the installed NuGet packages, or search and install new ones
 - _Manage user secrets_ : initialize and open the secrets.json file to manage user secrets
+- _Build project_: build the project
+- _Clean project_: clean the project
+- _Rebuild project_: rebuild the project
 
 This extensions adds the following shortcuts to the contextual menu for .sln files:
 - _Add existing projects to a solution_: visually add or remove projects from a solution
+- _Build solution_: build the solution
+- _Clean solution_: clean the solution
+- _Rebuild solution_: rebuild the solution
 
 ## Extension Settings
 
@@ -30,6 +36,10 @@ This extension contributes the following settings:
 - Can only search public packages from NuGet.org.
 
 ## Release Notes
+
+### 0.0.8
+
+- Added commands to build solutions and projects.
 
 ### 0.0.7
 
