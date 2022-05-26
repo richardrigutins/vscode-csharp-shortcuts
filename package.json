@@ -76,25 +76,25 @@
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.addProjectReference",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageNuGetPackages",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
           "when": "resourceExtname == .sln",
           "submenu": "csharp-shortcuts.addToSolution",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
           "when": "resourceExtname == .csproj",
           "command": "csharp-shortcuts.manageUserSecrets",
-          "group": "CSharpShortcutsGroup@1"
+          "group": "CSharpShortcutsGroup@2"
         },
         {
-          "when": "resourceExtname == .csproj",
+          "when": "resourceExtname == .csproj || resourceExtname == .sln",
           "command": "csharp-shortcuts.buildProject",
           "group": "CSharpShortcutsGroup@1"
         },
