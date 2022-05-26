@@ -4,3 +4,5 @@ export * from "./baseFileCommand";
 export * from "./buildCommand";
 export * from "./cleanCommand";
 export * from "./manageNuGetPackagesCommand";
+export * from "./manageUserSecretsCommand";
+export * from "./rebuildCommand";

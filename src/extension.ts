@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
-import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildCommand, CleanCommand } from './commands';
-import { ManageNuGetPackagesCommand } from './commands/manageNuGetPackagesCommand';
-import { ManageUserSecretsCommand } from './commands/manageUserSecretsCommand';
+import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildCommand, CleanCommand, ManageNuGetPackagesCommand, ManageUserSecretsCommand, RebuildCommand } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
 	const fileCommands: Map<string, BaseFileCommand> = new Map<string, BaseFileCommand>([
@@ -9,8 +7,9 @@ export function activate(context: vscode.ExtensionContext) {
 		['csharp-shortcuts.addProjectReference', new AddProjectReferenceCommand()],
 		['csharp-shortcuts.manageNuGetPackages', new ManageNuGetPackagesCommand()],
 		['csharp-shortcuts.manageUserSecrets', new ManageUserSecretsCommand()],
-		['csharp-shortcuts.buildProject', new BuildCommand()],
+		['csharp-shortcuts.build', new BuildCommand()],
 		['csharp-shortcuts.clean', new CleanCommand()],
+		['csharp-shortcuts.rebuild', new RebuildCommand()],
 	]);
 
 	fileCommands.forEach((command, key) => {
@@ -34,4 +33,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
 	// nothing to deactivate
- }
+}

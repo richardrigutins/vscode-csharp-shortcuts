@@ -29,8 +29,9 @@
     "onCommand:csharp-shortcuts.manageNuGetPackages",
     "onCommand:csharp-shortcuts.addExistingProject",
     "onCommand:csharp-shortcuts.manageUserSecrets",
-    "onCommand:csharp-shortcuts.buildProject",
-    "onCommand:csharp-shortcuts.clean"
+    "onCommand:csharp-shortcuts.build",
+    "onCommand:csharp-shortcuts.clean",
+    "onCommand:csharp-shortcuts.rebuild"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -63,12 +64,16 @@
         "title": "Manage User Secrets"
       },
       {
-        "command": "csharp-shortcuts.buildProject",
+        "command": "csharp-shortcuts.build",
         "title": "Build"
       },
       {
         "command": "csharp-shortcuts.clean",
         "title": "Clean"
+      },
+      {
+        "command": "csharp-shortcuts.rebuild",
+        "title": "Rebuild"
       }
     ],
     "menus": {
@@ -95,12 +100,17 @@
         },
         {
           "when": "resourceExtname == .csproj || resourceExtname == .sln",
-          "command": "csharp-shortcuts.buildProject",
+          "command": "csharp-shortcuts.build",
           "group": "CSharpShortcutsGroup@1"
         },
         {
           "when": "resourceExtname == .csproj || resourceExtname == .sln",
           "command": "csharp-shortcuts.clean",
+          "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .sln",
+          "command": "csharp-shortcuts.rebuild",
           "group": "CSharpShortcutsGroup@1"
         }
       ],
