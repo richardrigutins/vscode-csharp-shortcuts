@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
@@ -31,7 +31,8 @@
     "onCommand:csharp-shortcuts.manageUserSecrets",
     "onCommand:csharp-shortcuts.build",
     "onCommand:csharp-shortcuts.clean",
-    "onCommand:csharp-shortcuts.rebuild"
+    "onCommand:csharp-shortcuts.rebuild",
+    "onCommand:csharp-shortcuts.runProject"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -49,15 +50,15 @@
     "commands": [
       {
         "command": "csharp-shortcuts.addProjectReference",
-        "title": "Add project reference"
+        "title": "Add Project Reference"
       },
       {
         "command": "csharp-shortcuts.manageNuGetPackages",
-        "title": "Manage NuGet packages..."
+        "title": "Manage NuGet Packages..."
       },
       {
         "command": "csharp-shortcuts.addExistingProject",
-        "title": "Existing project..."
+        "title": "Existing Project..."
       },
       {
         "command": "csharp-shortcuts.manageUserSecrets",
@@ -74,6 +75,10 @@
       {
         "command": "csharp-shortcuts.rebuild",
         "title": "Rebuild"
+      },
+      {
+        "command": "csharp-shortcuts.runProject",
+        "title": "Run Project"
       }
     ],
     "menus": {
@@ -112,6 +117,11 @@
           "when": "resourceExtname == .csproj || resourceExtname == .sln",
           "command": "csharp-shortcuts.rebuild",
           "group": "CSharpShortcutsGroup@1"
+        },
+        {
+          "when": "resourceExtname == .csproj",
+          "command": "csharp-shortcuts.runProject",
+          "group": "CSharpShortcutsGroup@2"
         }
       ],
       "csharp-shortcuts.addToSolution": [

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildCommand, CleanCommand, ManageNuGetPackagesCommand, ManageUserSecretsCommand, RebuildCommand } from './commands';
+import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildCommand, CleanCommand, ManageNuGetPackagesCommand, ManageUserSecretsCommand, RebuildCommand, RunProjectCommand } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
 	const fileCommands: Map<string, BaseFileCommand> = new Map<string, BaseFileCommand>([
@@ -10,6 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 		['csharp-shortcuts.build', new BuildCommand()],
 		['csharp-shortcuts.clean', new CleanCommand()],
 		['csharp-shortcuts.rebuild', new RebuildCommand()],
+		['csharp-shortcuts.runProject', new RunProjectCommand()],
 	]);
 
 	fileCommands.forEach((command, key) => {

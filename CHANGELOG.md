@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.9]
+
+- Added command to run project.
+
 ## [0.0.8]
 
 - Added commands to build solutions and projects.
