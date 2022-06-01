@@ -14,6 +14,7 @@ This extensions adds the following shortcuts to the contextual menu for .csproj 
 - _Build project_: build the project
 - _Clean project_: clean the project
 - _Rebuild project_: rebuild the project
+- _Run project_: runs the project without debugging
 
 This extensions adds the following shortcuts to the contextual menu for .sln files:
 - _Add existing projects to a solution_: visually add or remove projects from a solution
@@ -36,6 +37,10 @@ This extension contributes the following settings:
 - Can only search public packages from NuGet.org.
 
 ## Release Notes
+
+### 0.0.9
+
+- Added command to run project.
 
 ### 0.0.8
 
