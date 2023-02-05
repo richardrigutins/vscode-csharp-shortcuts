@@ -1,7 +1,11 @@
 import * as vscode from 'vscode';
 import { AddExistingProjectCommand, AddProjectReferenceCommand, BaseFileCommand, BuildCommand, CleanCommand, ManageNuGetPackagesCommand, ManageUserSecretsCommand, RebuildCommand, RunProjectCommand } from './commands';
+import { initializeOutputChannel } from './utilities/outputChannelWrapper';
 
 export function activate(context: vscode.ExtensionContext) {
+    let outputChannel = initializeOutputChannel();
+	context.subscriptions.push(outputChannel);
+
 	const fileCommands: Map<string, BaseFileCommand> = new Map<string, BaseFileCommand>([
 		['csharp-shortcuts.addExistingProject', new AddExistingProjectCommand()],
 		['csharp-shortcuts.addProjectReference', new AddProjectReferenceCommand()],

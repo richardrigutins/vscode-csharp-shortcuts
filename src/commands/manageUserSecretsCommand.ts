@@ -1,9 +1,9 @@
 import * as FileUtilities from "../utilities/fileUtilities";
 import * as OsUtilities from '../utilities/osUtilities';
-import * as TerminalUtilities from "../utilities/terminalUtilities";
 import { BaseFileCommand } from '.';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { executeCommand } from "../utilities/executeCommand";
 
 /**
  * Runs the command to manage user secrets on a csproj file.
@@ -51,11 +51,11 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 	}
 
 	private initializeUserSecrets(csprojPath: string) {
-		TerminalUtilities.executeCommand(`dotnet user-secrets init --project ${csprojPath}`);
+		executeCommand(`dotnet user-secrets init --project "${csprojPath}"`);
 	}
 
 	private createEmptySecretsFile(csprojPath: string) {
-		TerminalUtilities.executeCommand(`dotnet user-secrets clear --project ${csprojPath}`);
+		executeCommand(`dotnet user-secrets clear --project "${csprojPath}"`);
 	}
 
 	private async readUserSecretsIdWithBackoff(csprojPath: string): Promise<string | undefined> {
