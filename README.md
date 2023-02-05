@@ -1,5 +1,11 @@
 # C# Shortcuts
-A VS Code extension that adds shortcuts for common operations for C# projects.
+
+This is a VS Code extension that adds shortcuts for common operations for C# projects.
+This extension effectively acts as a wrapper around the dotnet CLI, offering a visual way to perform common operations, like adding project references, managing NuGet packages, and more.
+
+This is meant to be a simple extension, with a small set of features to make it easier to work with C# projects.
+
+_Note: This extension is still in preview. Please report any issues you find._
 
 ## Requirements
 

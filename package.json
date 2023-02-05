@@ -22,17 +22,8 @@
   ],
   "keywords": [
     "csharp",
-    "shortcuts"
-  ],
-  "activationEvents": [
-    "onCommand:csharp-shortcuts.addProjectReference",
-    "onCommand:csharp-shortcuts.manageNuGetPackages",
-    "onCommand:csharp-shortcuts.addExistingProject",
-    "onCommand:csharp-shortcuts.manageUserSecrets",
-    "onCommand:csharp-shortcuts.build",
-    "onCommand:csharp-shortcuts.clean",
-    "onCommand:csharp-shortcuts.rebuild",
-    "onCommand:csharp-shortcuts.runProject"
+    "shortcuts",
+    "dotnet"
   ],
   "main": "./out/extension.js",
   "contributes": {
