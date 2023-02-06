@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.0.10]
+- Run commands as child processes instead of using the terminal.
+
 ## [0.0.9]
 
 - Added command to run project.
