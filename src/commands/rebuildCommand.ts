@@ -1,8 +1,8 @@
 import { BaseFileCommand } from ".";
-import { executeCommand } from "../utilities/executeCommand";
+import { executeDotnetCommand } from "../utilities/executeCommand";
 
 export class RebuildCommand implements BaseFileCommand {
 	async run(path: string): Promise<void> {
-		executeCommand(`dotnet build "${path}" --no-incremental`);
+		executeDotnetCommand(['build', `"${path}"`, '--no-incremental']);
 	}
 }

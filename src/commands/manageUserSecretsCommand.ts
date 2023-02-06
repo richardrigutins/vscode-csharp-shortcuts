@@ -3,7 +3,7 @@ import * as OsUtilities from '../utilities/osUtilities';
 import { BaseFileCommand } from '.';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { executeCommand } from "../utilities/executeCommand";
+import { executeDotnetCommand } from "../utilities/executeCommand";
 
 /**
  * Runs the command to manage user secrets on a csproj file.
@@ -34,12 +34,12 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 	}
 
 	private async initializeUserSecrets(csprojPath: string): Promise<string | undefined> {
-		await executeCommand(`dotnet user-secrets init --project "${csprojPath}"`);
+		await executeDotnetCommand(['user-secrets', 'init', '--project', `"${csprojPath}"`]);
 		return await this.readUserSecretsIdWithBackoff(csprojPath);
 	}
 
 	private createEmptySecretsFile(csprojPath: string): Promise<void> {
-		return executeCommand(`dotnet user-secrets clear --project "${csprojPath}"`);
+		return executeDotnetCommand(['user-secrets', 'clear', '--project', `"${csprojPath}"`]);
 	}
 
 	private async readUserSecretsIdWithBackoff(csprojPath: string): Promise<string | undefined> {

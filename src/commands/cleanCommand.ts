@@ -1,8 +1,8 @@
 import { BaseFileCommand } from ".";
-import { executeCommand } from "../utilities/executeCommand";
+import { executeDotnetCommand } from "../utilities/executeCommand";
 
 export class CleanCommand implements BaseFileCommand {
 	async run(path: string): Promise<void> {
-		executeCommand(`dotnet clean "${path}"`);
+		executeDotnetCommand(['clean', `"${path}"`]);
 	}
 }

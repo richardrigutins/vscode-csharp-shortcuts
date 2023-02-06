@@ -12,9 +12,8 @@ let isBusy = false;
  * @param showProgress If true, a progress notification will be shown while the command is executing.
  * @returns A promise that resolves when the command is done executing.
  */
-export function executeCommand(
-    cmd: string,
-    args: string[] = [],
+export function executeDotnetCommand(
+    args: string[],
     showChannel: boolean = true,
     showProgress: boolean = true,
 ): Promise<void> {
@@ -26,10 +25,11 @@ export function executeCommand(
 
     isBusy = true;
     return new Promise<void>((resolve, reject) => {
-        let command = buildCommand(cmd, args);
+        let command = buildCommand('dotnet', args);
 
-        var childProcess = cp.exec(command, {
-            env: process.env
+        var childProcess = cp.spawn('dotnet', args, {
+            env: process.env,
+            shell: true,
         });
 
         if (showChannel) {
@@ -41,22 +41,22 @@ export function executeCommand(
                 location: vscode.ProgressLocation.Notification,
                 title: `Executing command '${command}'...`,
             }, () => new Promise<void>((resolve) => {
-                childProcess.on("exit", resolve);
+                childProcess.on('exit', resolve);
             }));
         }
 
         appendLineToOutputChannel("-----------------------------------------------");
         appendLineToOutputChannel(command);
 
-        childProcess.stdout?.on("data", (data: string) => {
-            appendToOutputChannel(data);
+        childProcess.stdout.on('data', (data: Buffer) => {
+            appendToOutputChannel(data.toString());
         });
 
-        childProcess.stderr?.on("data", (data: string) => {
-            reject(data);
+        childProcess.stderr?.on('data', (data: Buffer) => {
+            reject(data.toString());
         });
 
-        childProcess.on("exit", (code) => {
+        childProcess.on('exit', (code) => {
             isBusy = false;
             if (code !== 0) {
                 reject(`Command '${command}' exited with code ${code}`);

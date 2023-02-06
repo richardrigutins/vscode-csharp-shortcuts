@@ -3,7 +3,7 @@ import * as FileUtilities from "../utilities/fileUtilities";
 import { BaseFileCommand } from '.';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { executeCommand } from '../utilities/executeCommand';
+import { executeDotnetCommand } from '../utilities/executeCommand';
 
 /**
  * Runs the command to add or remove project references on a csproj file.
@@ -86,7 +86,7 @@ export class AddProjectReferenceCommand implements BaseFileCommand {
 		const validProjects = projectsToAdd.filter(e => !invalidProjects.includes(e));
 
 		if (validProjects?.length > 0) {
-			await executeCommand(`dotnet add "${csprojPath}" reference`, validProjects.map(p => "\"" + p.fullPath + "\""));
+			await executeDotnetCommand(['add', `"${csprojPath}"`, 'reference', ...validProjects.map(p => "\"" + p.fullPath + "\"")]);
 		}
 
 		invalidProjects.forEach(e => {
@@ -152,7 +152,7 @@ export class AddProjectReferenceCommand implements BaseFileCommand {
 	private async removeProjectReferences(csprojPath: string, projectReferences: ProjectReferenceQuickPickItem[]) {
 		const projectsToRemove = projectReferences.filter(e => e.initialValue && !e.picked);
 		if (projectsToRemove?.length > 0) {
-			await executeCommand(`dotnet remove "${csprojPath}" reference`, projectsToRemove.map(p => "\"" + p.fullPath + "\""));
+			await executeDotnetCommand(['remove', `"${csprojPath}"`, 'reference', ...projectsToRemove.map(p => "\"" + p.fullPath + "\"")]);
 		}
 	}
 }

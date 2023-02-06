@@ -3,7 +3,7 @@ import * as FileUtilities from "../utilities/fileUtilities";
 import { BaseFileCommand } from ".";
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { executeCommand } from "../utilities/executeCommand";
+import { executeDotnetCommand } from "../utilities/executeCommand";
 
 /**
  * Runs the command to add or remove existing projects on a solution file.
@@ -93,7 +93,7 @@ export class AddExistingProjectCommand implements BaseFileCommand {
 	private async addProjects(slnPath: string, quickPickItems: ProjectReferenceQuickPickItem[]) {
 		const projectsToAdd = quickPickItems.filter(e => !e.initialValue && e.picked);
 		if (projectsToAdd?.length > 0) {
-			await executeCommand(`dotnet sln "${slnPath}" add`, projectsToAdd.map(p => "\"" + p.fullPath + "\""));
+			await executeDotnetCommand(['sln', `"${slnPath}"`, 'add', ...projectsToAdd.map(p => "\"" + p.fullPath + "\"")]);
 		}
 	}
 
@@ -105,7 +105,7 @@ export class AddExistingProjectCommand implements BaseFileCommand {
 	private async removeProjects(slnPath: string, quickPickItems: ProjectReferenceQuickPickItem[]) {
 		const projectsToRemove = quickPickItems.filter(e => e.initialValue && !e.picked);
 		if (projectsToRemove?.length > 0) {
-			await executeCommand(`dotnet sln "${slnPath}" remove`, projectsToRemove.map(p => "\"" + p.fullPath + "\""));
+			await executeDotnetCommand(['sln', `"${slnPath}"`, 'remove', ...projectsToRemove.map(p => "\"" + p.fullPath + "\"")]);
 		}
 	}
 }

@@ -1,11 +1,11 @@
 import { BaseFileCommand } from ".";
-import { executeCommand } from "../utilities/executeCommand";
+import { executeDotnetCommand } from "../utilities/executeCommand";
 
 /**
  * Executes the command to run the selected C# project.
  */
 export class RunProjectCommand implements BaseFileCommand {
     async run(path: string): Promise<void> {
-        executeCommand(`dotnet run --project "${path}"`);
+        executeDotnetCommand(['run', '--project', `"${path}"`]);
     }
 }
