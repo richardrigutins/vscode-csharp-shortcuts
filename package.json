@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
