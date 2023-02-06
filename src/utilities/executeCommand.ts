@@ -27,7 +27,7 @@ export function executeDotnetCommand(
     return new Promise<void>((resolve, reject) => {
         let command = buildCommand('dotnet', args);
 
-        var childProcess = cp.spawn('dotnet', args, {
+        let childProcess = cp.spawn('dotnet', args, {
             env: process.env,
             shell: true,
         });
