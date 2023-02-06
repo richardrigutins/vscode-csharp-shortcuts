@@ -25,6 +25,7 @@
     "shortcuts",
     "dotnet"
   ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
