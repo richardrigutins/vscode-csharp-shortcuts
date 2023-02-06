@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import * as cp from "child_process";
 import { appendLineToOutputChannel, appendToOutputChannel, showOutputChannel } from "./outputChannelWrapper";
 
+let isBusy = false;
+
 /**
  * Executes a command as a child process and shows the output in the output channel.
  * @param cmd The command to execute.
@@ -16,6 +18,13 @@ export function executeCommand(
     showChannel: boolean = true,
     showProgress: boolean = true,
 ): Promise<void> {
+    if (isBusy) {
+        let errorMessage = `Another command is already executing.`;
+        vscode.window.showErrorMessage(errorMessage);
+        return Promise.reject(errorMessage);
+    }
+
+    isBusy = true;
     return new Promise<void>((resolve, reject) => {
         let command = buildCommand(cmd, args);
 
@@ -48,6 +57,7 @@ export function executeCommand(
         });
 
         childProcess.on("exit", (code) => {
+            isBusy = false;
             if (code !== 0) {
                 reject(`Command '${command}' exited with code ${code}`);
             } else {
