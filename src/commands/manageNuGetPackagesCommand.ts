@@ -1,10 +1,10 @@
 import { NugetReferenceQuickPickItem, NugetSearchResultItem, PackageReference } from '../interfaces';
 import * as FileUtilities from "../utilities/fileUtilities";
 import * as NugetUtilities from '../utilities/nugetUtilities';
-import * as TerminalUtilities from "../utilities/terminalUtilities";
 import { BaseFileCommand } from '.';
 import * as compareVersions from 'compare-versions';
 import * as vscode from 'vscode';
+import { executeDotnetCommand } from '../utilities/executeCommand';
 
 /**
  * Runs the command to manage NuGet packages on a csproj file.
@@ -136,7 +136,7 @@ export class ManageNuGetPackagesCommand implements BaseFileCommand {
 	 * @param packageVersion The version of the package to add
 	 */
 	private addPackageReference(csprojPath: string, packageName: string, packageVersion: string): void {
-		TerminalUtilities.executeCommand(`dotnet add '${csprojPath}' package ${packageName}`, [`--version ${packageVersion}`]);
+		executeDotnetCommand(['add', `"${csprojPath}"`, 'package', `${packageName}`, '--version', `${packageVersion}`]);
 	}
 
 	private showManagePackageQuickPick(csprojPath: string, selectedPackage: NugetReferenceQuickPickItem): void {
@@ -169,7 +169,7 @@ export class ManageNuGetPackagesCommand implements BaseFileCommand {
 	 * @param packageName The name of the package to remove
 	 */
 	private removePackageReference(csprojPath: string, packageName: string): void {
-		TerminalUtilities.executeCommand(`dotnet remove '${csprojPath}' package ${packageName}`);
+		executeDotnetCommand(['remove', `"${csprojPath}"`, 'package', `${packageName}`]);
 	}
 
 	private showUpdatePackageQuickPick(csprojPath: string, packageName: string, packageVersion: string): void {

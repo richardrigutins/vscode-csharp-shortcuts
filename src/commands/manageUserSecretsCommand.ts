@@ -1,9 +1,9 @@
 import * as FileUtilities from "../utilities/fileUtilities";
 import * as OsUtilities from '../utilities/osUtilities';
-import * as TerminalUtilities from "../utilities/terminalUtilities";
 import { BaseFileCommand } from '.';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { executeDotnetCommand } from "../utilities/executeCommand";
 
 /**
  * Runs the command to manage user secrets on a csproj file.
@@ -15,32 +15,15 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 	async run(csprojPath: string) {
 		let userSecretsId: string | undefined = await this.readUserSecretsId(csprojPath);
 		if (!userSecretsId) {
-			await vscode.window.withProgress({
-				location: vscode.ProgressLocation.Notification,
-				title: 'Initializing user secrets...'
-			}, async () => {
-				this.initializeUserSecrets(csprojPath);
-				userSecretsId = await this.readUserSecretsIdWithBackoff(csprojPath);
-				if (!userSecretsId) {
-					throw new Error(`Failed to read user secrets id from ${csprojPath}.`);
-				}
-			});
+			userSecretsId = await this.initializeUserSecrets(csprojPath);
+			if (!userSecretsId) {
+				throw new Error(`Failed to read user secrets id from ${csprojPath}.`);
+			}
 		}
 
 		const secretsFilePath = this.getSecretsFilePath(userSecretsId);
 		if (!this.fileExists(secretsFilePath)) {
-			await vscode.window.withProgress({
-				location: vscode.ProgressLocation.Notification,
-				title: 'Creating secrets file...'
-			}, async () => {
-				// The user secrets id might have been initialized on another machine
-				// and the secrets file still needs to be created locally.
-				this.createEmptySecretsFile(csprojPath);
-
-				if (!(await this.checkFileExistenceWithBackoff(secretsFilePath))) {
-					throw new Error(`Failed to find secrets file ${secretsFilePath}.`);
-				}
-			});
+			await this.createEmptySecretsFile(csprojPath);
 		}
 
 		await this.openSecretsFile(secretsFilePath);
@@ -50,12 +33,13 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 		return FileUtilities.readUserSecretsId(csprojPath);
 	}
 
-	private initializeUserSecrets(csprojPath: string) {
-		TerminalUtilities.executeCommand(`dotnet user-secrets init --project ${csprojPath}`);
+	private async initializeUserSecrets(csprojPath: string): Promise<string | undefined> {
+		await executeDotnetCommand(['user-secrets', 'init', '--project', `"${csprojPath}"`]);
+		return await this.readUserSecretsIdWithBackoff(csprojPath);
 	}
 
-	private createEmptySecretsFile(csprojPath: string) {
-		TerminalUtilities.executeCommand(`dotnet user-secrets clear --project ${csprojPath}`);
+	private createEmptySecretsFile(csprojPath: string): Promise<void> {
+		return executeDotnetCommand(['user-secrets', 'clear', '--project', `"${csprojPath}"`]);
 	}
 
 	private async readUserSecretsIdWithBackoff(csprojPath: string): Promise<string | undefined> {
@@ -94,17 +78,6 @@ export class ManageUserSecretsCommand implements BaseFileCommand {
 
 	private isWindows(): boolean {
 		return OsUtilities.isWindows();
-	}
-
-	private async checkFileExistenceWithBackoff(secretsFilePath: string): Promise<boolean> {
-		for (let i = 0; i < this.backoffRetries; i++) {
-			await this.waitForMilliseconds(this.backoffDelay);
-			if (this.fileExists(secretsFilePath)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private async openSecretsFile(secretsFilePath: string): Promise<void> {
