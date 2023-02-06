@@ -93,7 +93,7 @@ export class AddExistingProjectCommand implements BaseFileCommand {
 	private async addProjects(slnPath: string, quickPickItems: ProjectReferenceQuickPickItem[]) {
 		const projectsToAdd = quickPickItems.filter(e => !e.initialValue && e.picked);
 		if (projectsToAdd?.length > 0) {
-			executeCommand(`dotnet sln "${slnPath}" add`, projectsToAdd.map(p => "\"" + p.fullPath + "\""));
+			await executeCommand(`dotnet sln "${slnPath}" add`, projectsToAdd.map(p => "\"" + p.fullPath + "\""));
 		}
 	}
 
@@ -105,7 +105,7 @@ export class AddExistingProjectCommand implements BaseFileCommand {
 	private async removeProjects(slnPath: string, quickPickItems: ProjectReferenceQuickPickItem[]) {
 		const projectsToRemove = quickPickItems.filter(e => e.initialValue && !e.picked);
 		if (projectsToRemove?.length > 0) {
-			executeCommand(`dotnet sln "${slnPath}" remove`, projectsToRemove.map(p => "\"" + p.fullPath + "\""));
+			await executeCommand(`dotnet sln "${slnPath}" remove`, projectsToRemove.map(p => "\"" + p.fullPath + "\""));
 		}
 	}
 }

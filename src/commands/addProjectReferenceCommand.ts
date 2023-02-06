@@ -86,7 +86,7 @@ export class AddProjectReferenceCommand implements BaseFileCommand {
 		const validProjects = projectsToAdd.filter(e => !invalidProjects.includes(e));
 
 		if (validProjects?.length > 0) {
-			executeCommand(`dotnet add "${csprojPath}" reference`, validProjects.map(p => "\"" + p.fullPath + "\""));
+			await executeCommand(`dotnet add "${csprojPath}" reference`, validProjects.map(p => "\"" + p.fullPath + "\""));
 		}
 
 		invalidProjects.forEach(e => {
@@ -152,7 +152,7 @@ export class AddProjectReferenceCommand implements BaseFileCommand {
 	private async removeProjectReferences(csprojPath: string, projectReferences: ProjectReferenceQuickPickItem[]) {
 		const projectsToRemove = projectReferences.filter(e => e.initialValue && !e.picked);
 		if (projectsToRemove?.length > 0) {
-			executeCommand(`dotnet remove "${csprojPath}" reference`, projectsToRemove.map(p => "\"" + p.fullPath + "\""));
+			await executeCommand(`dotnet remove "${csprojPath}" reference`, projectsToRemove.map(p => "\"" + p.fullPath + "\""));
 		}
 	}
 }
