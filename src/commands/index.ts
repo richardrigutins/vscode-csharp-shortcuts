@@ -6,4 +6,3 @@ export * from "./cleanCommand";
 export * from "./manageNuGetPackagesCommand";
 export * from "./manageUserSecretsCommand";
 export * from "./rebuildCommand";
-export * from "./runProjectCommand";

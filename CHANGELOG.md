@@ -1,6 +1,11 @@
 # Change Log
 
+## [0.0.11]
+
+- Removed the _Run project_ command.
+
 ## [0.0.10]
+
 - Run commands as child processes instead of using the terminal.
 
 ## [0.0.9]

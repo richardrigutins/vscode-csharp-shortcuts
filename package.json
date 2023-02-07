@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
@@ -67,10 +67,6 @@
       {
         "command": "csharp-shortcuts.rebuild",
         "title": "Rebuild"
-      },
-      {
-        "command": "csharp-shortcuts.runProject",
-        "title": "Run Project"
       }
     ],
     "menus": {
@@ -109,11 +105,6 @@
           "when": "resourceExtname == .csproj || resourceExtname == .sln",
           "command": "csharp-shortcuts.rebuild",
           "group": "CSharpShortcutsGroup@1"
-        },
-        {
-          "when": "resourceExtname == .csproj",
-          "command": "csharp-shortcuts.runProject",
-          "group": "CSharpShortcutsGroup@2"
         }
       ],
       "csharp-shortcuts.addToSolution": [
