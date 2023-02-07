@@ -44,6 +44,10 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.0.12
+
+- Reduced the size of the extension.
+
 ### 0.0.11
 
 - Removed the _Run project_ command.

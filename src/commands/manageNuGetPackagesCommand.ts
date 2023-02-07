@@ -2,7 +2,7 @@ import { NugetReferenceQuickPickItem, NugetSearchResultItem, PackageReference } 
 import * as FileUtilities from "../utilities/fileUtilities";
 import * as NugetUtilities from '../utilities/nugetUtilities';
 import { BaseFileCommand } from '.';
-import * as compareVersions from 'compare-versions';
+import compareVersions from 'compare-versions';
 import * as vscode from 'vscode';
 import { executeDotnetCommand } from '../utilities/executeCommand';
 

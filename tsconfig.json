@@ -17,5 +17,6 @@
 		"noUnusedLocals": true,  /* Report errors on unused locals. */
 		"noImplicitThis": true,  /* Raise error on 'this' expressions with an implied 'any' type. */
 		"noImplicitAny": true,  /* Raise error on expressions and declarations with an implied 'any' type. */
+		"esModuleInterop": true
 	}
 }
