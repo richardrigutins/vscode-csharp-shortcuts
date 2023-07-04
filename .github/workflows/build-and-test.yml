@@ -28,5 +28,8 @@ jobs:
     - name: Build extension
       run: npm run vscode:prepublish
 
+    - name: Run pretest
+      run: npm run pretest
+
     - name: Run tests
       run: npm test
