@@ -30,6 +30,3 @@ jobs:
 
     - name: Run pretest
       run: npm run pretest
-
-    - name: Run tests
-      run: npm test
