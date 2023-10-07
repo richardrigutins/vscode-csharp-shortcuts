@@ -2,7 +2,7 @@
   "name": "csharp-shortcuts",
   "displayName": "C# Shortcuts",
   "description": "Shortcuts for common operations for C# projects",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "publisher": "richardrigutins",
   "license": "MIT",
   "preview": true,
@@ -70,6 +70,36 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "csharp-shortcuts.addProjectReference",
+          "when": "false"
+        },
+        {
+          "command": "csharp-shortcuts.manageNuGetPackages",
+          "when": "false"
+        },
+        {
+          "command": "csharp-shortcuts.addExistingProject",
+          "when": "false"
+        },
+        {
+          "command": "csharp-shortcuts.manageUserSecrets",
+          "when": "false"
+        },
+        {
+          "command": "csharp-shortcuts.build",
+          "when": "false"
+        },
+        {
+          "command": "csharp-shortcuts.clean",
+          "when": "false"
+        },
+        {
+          "command": "csharp-shortcuts.rebuild",
+          "when": "false"
+        }
+      ],
       "explorer/context": [
         {
           "when": "resourceExtname == .csproj",

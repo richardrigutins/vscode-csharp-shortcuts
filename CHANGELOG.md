@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.13]
+
+- Removed commands from command palette.
+
 ## [0.0.12]
 
 - Reduced the size of the extension.

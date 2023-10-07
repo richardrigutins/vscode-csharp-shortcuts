@@ -12,7 +12,9 @@ _Note: This extension is still in preview. Please report any issues you find._
 This extension requires the dotnet CLI to be installed.
 
 ## Features
+
 This extensions adds the following shortcuts to the contextual menu for .csproj files:
+
 - _Add project references_: visually add or remove references to other projects
 ![add project reference](images/add-project-reference-context-menu.png)
 - _Manage NuGet packages_: manage the installed NuGet packages, or search and install new ones
@@ -23,6 +25,7 @@ This extensions adds the following shortcuts to the contextual menu for .csproj 
 - _Run project_: runs the project without debugging
 
 This extensions adds the following shortcuts to the contextual menu for .sln files:
+
 - _Add existing projects to a solution_: visually add or remove projects from a solution
 - _Build solution_: build the solution
 - _Clean solution_: clean the solution
@@ -44,6 +47,10 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.0.13
+
+- Removed commands from command palette.
+
 ### 0.0.12
 
 - Reduced the size of the extension.
@@ -53,6 +60,7 @@ This extension contributes the following settings:
 - Removed the _Run project_ command.
 
 ### 0.0.10
+
 - Run commands as child processes instead of using the terminal.
 
 ### 0.0.9
@@ -87,4 +95,4 @@ This extension contributes the following settings:
 
 ## Contribute
 
-Open a PR or an issue on GitHub.
+Contributions are welcome! Please open an issue or a pull request.
