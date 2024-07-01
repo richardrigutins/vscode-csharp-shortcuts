@@ -164,7 +164,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.6",
+    "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
     "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -173,7 +173,7 @@
     "esbuild": "^0.21.5",
     "eslint": "^8.57.0",
     "glob": "^10.4.2",
-    "mocha": "^10.4.0",
+    "mocha": "^10.5.2",
     "typescript": "^5.5.2"
   },
   "dependencies": {
