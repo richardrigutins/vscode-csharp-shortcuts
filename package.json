@@ -174,7 +174,7 @@
     "eslint": "^8.57.0",
     "glob": "^10.4.2",
     "mocha": "^10.5.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
     "axios": "^1.7.2",
